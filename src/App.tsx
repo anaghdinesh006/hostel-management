@@ -758,6 +758,137 @@ useEffect(() => {
       Back to Dashboard
     </button>
   </section>
+
+) : activePage === 'Students' ? (
+  <section className="panel">
+    <h2>Student Directory</h2>
+    <p>Search student records and view their room assignments.</p>
+
+    <form onSubmit={searchStudentAllocation}>
+      <input
+        type="text"
+        value={studentSearch}
+        onChange={(event) => setStudentSearch(event.target.value)}
+        placeholder="Enter student ID, roll number, or name"
+        required
+      />
+      <button
+        className="primary-button"
+        type="submit"
+        disabled={allocationLoading}
+      >
+        {allocationLoading ? 'Searching...' : 'Search Student'}
+      </button>
+    </form>
+
+    {allocationError && <p role="alert">{allocationError}</p>}
+
+    {allocationLoading && <p>Searching student records...</p>}
+
+    {!allocationLoading && searched && allocationResults.length === 0 &&
+      !allocationError && <p>No student records found.</p>}
+
+    {allocationResults.map((student) => (
+      <article className="panel" key={student.student_id}>
+        <h3>{student.full_name}</h3>
+        <p><strong>Student ID:</strong> {student.student_id}</p>
+        <p><strong>Roll Number:</strong> {student.roll_number}</p>
+        <p><strong>Email:</strong> {student.email || 'Not available'}</p>
+        <p><strong>Phone:</strong> {student.phone || 'Not available'}</p>
+
+        <h4>Room Assignment</h4>
+        {student.allocation_id != null ? (
+          <>
+            <p><strong>Hostel:</strong> {student.hostel_name || 'Not available'}</p>
+            <p><strong>Room:</strong> {student.room_number || 'Not available'}</p>
+            <p><strong>Room Type:</strong> {student.room_type || 'Not available'}</p>
+            <p><strong>Allocation Status:</strong> {student.status || 'Not available'}</p>
+          </>
+        ) : (
+          <p>No active room allocation found.</p>
+        )}
+      </article>
+    ))}
+
+    <button
+      className="primary-button"
+      onClick={() => setActivePage('Dashboard')}
+    >
+      Back to Dashboard
+    </button>
+  </section>
+) : activePage === 'Reports' ? (
+  <section className="panel">
+  <h2>Reports</h2>
+  <p>Hostel Management System summary</p>
+
+  <div className="stats-grid">
+    <article className="stat-card">
+      <h3>Total Hostels</h3>
+      <p>{hostels.length}</p>
+    </article>
+
+    <article className="stat-card">
+      <h3>Total Rooms</h3>
+      <p>{rooms.length}</p>
+    </article>
+
+    <article className="stat-card">
+      <h3>Total Allocations</h3>
+      <p>{allocations.length}</p>
+    </article>
+
+    <article className="stat-card">
+      <h3>Visitor Records</h3>
+      <p>{visitors.length}</p>
+    </article>
+
+    <article className="stat-card">
+      <h3>Maintenance Requests</h3>
+      <p>{maintenanceRequests.length}</p>
+    </article>
+  </div>
+
+  <h3>Room Inventory</h3>
+  {rooms.length === 0 ? (
+    <p>No room records available.</p>
+  ) : (
+    <table>
+      <thead>
+        <tr>
+          <th>Room Number</th>
+          <th>Room Type</th>
+          <th>Capacity</th>
+          <th>Monthly Fee</th>
+        </tr>
+      </thead>
+      <tbody>
+        {rooms.map((room) => (
+          <tr key={room.room_number}>
+            <td>{room.room_number}</td>
+            <td>{room.room_type}</td>
+            <td>{room.capacity}</td>
+            <td>{room.monthly_fee}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  )}
+
+  <button
+    className="primary-button"
+    onClick={() => window.print()}
+  >
+    Print Report
+  </button>
+
+  <button
+    className="primary-button"
+    onClick={() => setActivePage('Dashboard')}
+  >
+    Back to Dashboard
+  </button>
+</section>
 ) : (
   <section className="panel page-placeholder">
     <div className="empty-icon">▤</div>
@@ -771,6 +902,7 @@ useEffect(() => {
     </button>
   </section>
 )}
+
 
 
 
