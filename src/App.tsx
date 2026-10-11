@@ -382,6 +382,9 @@ useEffect(() => {
             <div className="profile">A</div>
           </div>
         </header>
+        {loading && <p>Loading hostel data...</p>}
+        {apiError && <p role="alert">{apiError}</p>}
+
 
         {activePage === 'Dashboard' ? (
           <>
